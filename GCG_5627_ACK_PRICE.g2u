@@ -1,0 +1,739 @@
+Program.Sub.Preflight.Start
+v.Global.sAckPrice.Declare
+v.Global.sStdPrice.Declare
+v.Global.sMrgPrice.Declare
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+'BM 3/30/2020 Changed All uses of <> in if statements to = w/ accompanying else statement, as a hotfix change seems to of made <> not work
+'Hooks:
+'12010: Line Populate
+'12020: Ship To Hook
+'12705: Line Change
+'12120: Qty-Ordered
+'12045; Load Part Hook
+'12420: OE Line Script Button 2
+
+'10290: populate
+'10680: Script 2
+'16090: Pre Process for Reports.
+'10260: Quote Line Populate
+'10290: Quote Part
+'10370: Quote Qty Ordered Hook
+'10400: Quote Price Hook
+f.Intrinsic.Control.Try
+	f.Intrinsic.Control.SelectCase(v.Caller.Hook)
+		f.Intrinsic.Control.Case(12010)		
+			f.Intrinsic.Control.CallSub(showGabControls)			
+'		f.Intrinsic.Control.Case(12020)
+'			f.Intrinsic.Control.CallSub(qtyChange)
+		f.Intrinsic.Control.Case(12705)
+			f.Intrinsic.Control.CallSub(loadPrice)
+'			f.Intrinsic.Control.CallSub(qtyChange)
+'		f.Intrinsic.Control.Case(12120)
+'			f.Intrinsic.Control.CallSub(createDisplayDT)
+'			f.Intrinsic.Control.CallSub(qtyChange)
+'		f.Intrinsic.Control.Case(12045)
+'			f.Intrinsic.Control.CallSub(createDisplayDT)
+'			f.Intrinsic.Control.CallSub(qtyChange)			
+		f.Intrinsic.Control.Case(12420)
+			f.Intrinsic.Control.CallSub(createDisplayDT)
+			f.Intrinsic.Control.CallSub(qtyChange)
+		f.Intrinsic.Control.Case(12430)
+			f.Intrinsic.Control.CallSub(createDisplayDT)
+			f.Intrinsic.Control.CallSub(calcMargin)	
+		'Report
+'		f.Intrinsic.Control.Case(16090)
+'			f.Intrinsic.Control.If(v.Passed.BIP_REPORTID, <>, "000054")
+'				f.Intrinsic.Control.End
+'			f.Intrinsic.Control.EndIf
+'			f.Intrinsic.Control.CallSub(getDataTable)
+			
+		'Quote Hooks
+		f.Intrinsic.Control.Case(10260)
+			v.Passed.000202.Set("Calc Price")
+		f.Intrinsic.Control.Case(10680)
+			f.Intrinsic.Control.CallSub(createDisplayDT)
+			f.Intrinsic.Control.CallSub(qtyChangeQuote)
+'		f.Intrinsic.Control.Case(10290)
+'			f.Intrinsic.Control.CallSub(createDisplayDT)
+'			f.Intrinsic.Control.CallSub(qtyChangeQuote)
+'		f.Intrinsic.Control.Case(10370)
+'			f.Intrinsic.Control.CallSub(createDisplayDT)
+'			f.Intrinsic.Control.CallSub(qtyChangeQuote)
+	f.Intrinsic.Control.EndSelect
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.Main.End
+
+'
+Program.Sub.createDisplayDT.Start
+f.Intrinsic.Control.Try
+	f.Data.DataTable.Create("savePriceDT", true)
+	f.Data.DataTable.AddColumn("savePriceDT", "QUOTE_NO", "String")
+	f.Data.DataTable.AddColumn("savePriceDT", "QUOTE_LINE_NO", "String")
+	f.Data.DataTable.AddColumn("savePriceDT", "INPUT_PRICE", "FLOAT")
+	f.Data.DataTable.AddColumn("savePriceDT", "AKC_PRICE", "FLOAT")
+	f.Data.DataTable.AddColumn("savePriceDT", "MARGIN_PRICE", "FLOAT")
+	f.Data.DataTable.AddColumn("savePriceDT", "SO_NO", "String")
+	f.Data.DataTable.AddColumn("savePriceDT", "SO_LINE_NO", "String")
+	f.Data.DataTable.AddColumn("savePriceDT", "LAST_GSS", "String")
+	f.Data.DataTable.AddColumn("savePriceDT", "LAST_DATE", "String")
+	
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.createDisplayDT.End
+
+Program.Sub.ErrorMsg.Start
+v.Local.sError.Declare
+
+'Closes ODBC connection, default to connection : "con"
+f.Intrinsic.Control.If(v.ODBC!con.State, =, 1)
+	f.ODBC.Connection!con.Close
+f.Intrinsic.Control.EndIf
+
+'Generic Error message.
+f.Intrinsic.String.Build("Project GCG_5627_ACK_PRICE.g2u {0}{0}Subroutine: {1}{0}Error: {2} with Description: {3}", v.Ambient.NewLine, v.Args.CurrentSub, v.Ambient.ErrorNumber, v.Ambient.ErrorDescription, v.Local.sError)
+f.Intrinsic.UI.Msgbox(v.Local.sError)
+Program.Sub.ErrorMsg.End
+
+Program.Sub.showGabControls.Start
+f.Intrinsic.Control.Try
+	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-LBL-1, "HIDE", 0)
+	'f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-LBL-1, "LOCK", 1)
+	f.Intrinsic.Variable.SetProperty("GAB-LBL-1", "PL", 215)
+	f.Intrinsic.Variable.SetProperty("GAB-LBL-1", "PT", 225)
+	f.Intrinsic.Variable.SetProperty("GAB-LBL-1", "PW", 65)
+	v.Passed.GAB-LBL-1.Set("Ack Price")
+	
+	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-1, "HIDE", 0)
+	f.Intrinsic.UI.ChangeCallerProperty(v.Passed.GAB-TEXT-1, "LOCK", 1)
+	f.Intrinsic.Variable.SetProperty("GAB-TEXT-1", "PL", 280)
+	f.Intrinsic.Variable.SetProperty("GAB-TEXT-1", "PT", 225)
+	f.Intrinsic.Variable.SetProperty("GAB-TEXT-1", "PW", 90)
+	
+	f.Intrinsic.Variable.SetProperty("GAB-TEXT-1", "BC", 65535)
+	
+	v.Passed.000189.Set("Inv Price")
+	v.Passed.000141.Set("MRG W/DISC")
+	v.Passed.000210.Set("MRG W/O DISC")
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.showGabControls.End
+
+Program.Sub.qtyChange.Start
+v.Local.sOrderNumber.Declare
+v.Local.sCustomer.Declare
+v.Local.sShipToCode.Declare
+v.Local.sPartNumber.Declare
+v.Local.sProductLine.Declare
+v.Local.fPrice.Declare
+v.Local.fQty.Declare
+v.Local.fPL_Discount.Declare
+v.Local.fCust_Margin.Declare
+v.Local.sSQL.Declare
+v.Local.sOwnersGroup.Declare
+v.Local.sOG_Check.Declare
+v.Local.sPL_Check.Declare
+v.Local.sQuote.Declare
+v.Local.sLine.Declare
+'v.Passed.000060 - Order Number (Not Padded)
+'v.Passed.000022 - Ship To
+'v.Passed.000052 - Part Number (No Rev)
+'v.Passed.000053 - Rev
+'v.Passed.000007 - QTY
+'v.Passed.000009 - Current Price
+'v.Passed.
+
+
+f.Intrinsic.Control.Try
+
+	f.Intrinsic.String.LPad(v.Passed.000060, "0", 7, v.Local.sOrderNumber)
+	v.Local.sShipToCode.Set(v.Passed.000022)
+	f.Intrinsic.String.RPad(v.Passed.000052, " ", 17, v.Local.sPartNumber)
+	f.Intrinsic.String.Build("{0}{1}", v.Local.sPartNumber, v.Passed.000053, v.Local.sPartNumber)
+	v.Local.sLine.Set(v.Passed.000051)
+	f.Intrinsic.String.LPad(v.Local.sLine, "0", 3, v.Local.sLine)
+	f.Intrinsic.String.RPad(v.Local.sLine, "0", 4, v.Local.sLine)
+	
+	f.ODBC.Connection!con.OpenCompanyConnection
+		f.Intrinsic.String.Build("Select Address_5_Ship from V_ORDER_SHIP_TO where order_no = '{0}' and order_ship_id = '{1}'", v.Local.sOrderNumber, v.Local.sShipToCode, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sOwnersGroup)
+'		f.Intrinsic.String.Build("Select AMT_Price from Inventory_Mstr where Part = '{0}'", v.Local.sPartNumber, v.Local.sSQL)
+'		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.fPrice)
+		f.Intrinsic.String.Build("Select Product_Line from Inventory_Mstr where Part = '{0}'", v.Local.sPartNumber, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sProductLine)
+		
+		f.Intrinsic.String.Build("Select Ship_To from GCG_5627_CUST_MAINT where Ship_to = '{0}'", v.Local.sOwnersGroup.Trim, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sOG_Check)
+		
+		f.Intrinsic.String.Build("Select Quote from V_Order_Header where Order_No = '{0}'", v.Local.sOrderNumber, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sQuote)
+		
+		f.Intrinsic.String.Build("Select Product_Line from GCG_5627_CUST_MAINT where Product_Line = '{0}' and Ship_To = '{1}'", v.Local.sProductLine.Trim, v.Local.sOwnersGroup.Trim,  v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sPL_Check)
+		
+		f.Intrinsic.String.Trim(v.Local.sProductLine, v.Local.sProductLine)
+		f.Intrinsic.Control.If(v.Local.sPL_Check.Trim, =, v.Local.sProductLine.Trim)
+		f.Intrinsic.Control.Else
+			v.Local.sProductLine.Set("  ")
+		f.Intrinsic.Control.EndIf
+		'f.Intrinsic.String.Build("Select PL_DISCNT from GCG_5627_CUST_MAINT where Customer = '{0}' and Product_Line = '{1}' and Ship_To = '{2}'", v.Local.sCustomer.Trim, v.Local.sProductLine.Trim, v.Local.sShipToCode.Trim,  v.Local.sSQL)
+		f.Intrinsic.String.Build("Select PL_DISCNT from GCG_5627_CUST_MAINT where Product_Line = '{0}' and Ship_To = '{1}'", v.Local.sProductLine, v.Local.sOwnersGroup.Trim,  v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.fPL_Discount)
+		'f.Intrinsic.String.Build("Select CUST_MARGIN from GCG_5627_CUST_MAINT where Customer = '{0}' and Product_Line = '{1}' and Ship_To = '{2}'", v.Local.sCustomer.Trim, v.Local.sProductLine.Trim, v.Local.sShipToCode.Trim, v.Local.sSQL)
+		f.Intrinsic.String.Build("Select CUST_MARGIN from GCG_5627_CUST_MAINT where Product_Line = '{0}' and Ship_To = '{1}'", v.Local.sProductLine, v.Local.sOwnersGroup.Trim, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.fCust_Margin)
+	f.ODBC.Connection!con.Close
+	
+	v.Local.fQty.Set(v.Passed.000007)
+	'f.Intrinsic.Math.Mult(v.Local.fPrice, v.Local.fQty, v.Local.fPrice)
+	'
+	f.Intrinsic.Control.If(v.Passed.000009, =, 0)
+	f.Intrinsic.Control.Else
+		v.Local.fPrice.Set(v.Passed.000009)
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.If(v.Local.sOG_Check.Trim, =, "")
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.If(v.Caller.Hook, =, 12140)
+		v.Local.fPrice.Set(v.Passed.000009)
+	f.Intrinsic.Control.EndIf
+	'fpassedCust_Margin
+
+	f.Intrinsic.Control.CallSub(calculateAckPrice, "fPassedInventoryPrice", v.Local.fPrice, "fpassedPL_Discount", v.Local.fPL_Discount, "fpassedCust_Margin", v.Local.fCust_Margin)
+	
+'	v.Passed.000009.Set(v.Global.sStdPrice)
+'	v.Passed.GAB-TEXT-1.Set(v.Global.sAckPrice)
+
+	v.Passed.000009.Set(v.Global.sAckPrice)
+	v.Passed.GAB-TEXT-1.Set(v.Global.sStdPrice)
+	
+	f.Data.DataTable.DeleteRow("savePriceDT")
+	f.Data.DataTable.AcceptChanges("savePriceDT")
+	
+	f.Data.DataTable.AddRow("savePriceDT", "QUOTE_NO", v.Local.sQuote, "QUOTE_LINE_NO",  v.Local.sLine, "INPUT_PRICE", v.Global.sStdPrice, "AKC_PRICE",  v.Global.sAckPrice, "MARGIN_PRICE", 0.0, "SO_NO", v.Local.sOrderNumber, "SO_LINE_NO", v.Local.sLine, "LAST_GSS", v.Caller.User, "LAST_DATE", v.Ambient.Date.PervasiveDate)
+	
+	f.Data.DataTable.AcceptChanges("savePriceDT")
+	
+	f.ODBC.Connection!con.OpenCompanyConnection
+	 	f.Data.DataTable.SaveToDB("savePriceDT", "con", "GCG_5627_Q2SO", "QUOTE_NO*!*QUOTE_LINE_NO*!*SO_NO*!*SO_LINE_NO", 256)
+	f.ODBC.Connection!con.Close
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.qtyChange.End
+
+Program.Sub.calculateAckPrice.Start
+v.Local.fInvPrice.Declare
+v.Local.fPl_Discnt.Declare
+v.Local.fCust_Margin.Declare
+v.Local.fMult1.Declare
+v.Local.fMult2.Declare
+v.Local.fResult1.Declare
+v.Local.fResult2.Declare
+v.Local.fResult3.Declare
+v.Local.iTemp.Declare
+f.Intrinsic.Control.Try
+	v.Local.fInvPrice.Set(v.Args.fPassedInventoryPrice)
+	v.Local.fPl_Discnt.Set(v.Args.fpassedPL_Discount)
+	v.Local.fCust_Margin.Set(v.Args.fpassedCust_Margin)
+	
+	f.Intrinsic.Math.Sub(1, v.Local.fPl_Discnt, v.Local.fMult1)
+	f.Intrinsic.Math.Sub(1, v.Local.fCust_Margin, v.Local.fMult2)
+	
+	f.Intrinsic.Math.Mult(v.Local.fMult1, v.Local.fMult2, v.Local.fInvPrice, v.Local.fResult1)
+	f.Intrinsic.Math.Mult(v.Local.fMult1, v.Local.fInvPrice, v.Local.fResult2)
+	f.Intrinsic.Math.Mult(v.Local.fMult2, v.Local.fInvPrice, v.Local.fResult3)
+	
+	f.Intrinsic.Math.Round(v.Local.fResult1, 2, v.Local.fResult1)
+	f.Intrinsic.Math.Round(v.Local.fResult2, 2, v.Local.fResult2)
+	f.Intrinsic.Math.Round(v.Local.fResult3, 2, v.Local.fResult3)	
+'	f.Intrinsic.Math.Ceiling(v.Local.fResult2, v.Local.iTemp)
+'	v.Global.sAckPrice.Set(v.Local.fResult1)
+'	v.Global.sStdPrice.Set(v.Local.fResult2)
+	
+	f.Intrinsic.String.Format(v.Local.fResult1, "0.00", v.Global.sAckPrice)
+	f.Intrinsic.String.Format(v.Local.fResult2, "0.00", v.Global.sStdPrice)
+	f.Intrinsic.String.Format(v.Local.fResult3, "0.00", v.Global.sMrgPrice)
+	
+	f.Intrinsic.Control.If(v.Caller.Hook, =, 12140)
+		f.Intrinsic.String.Format(v.Local.fInvPrice, "0.00", v.Global.sStdPrice)
+	f.Intrinsic.Control.EndIf	
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.calculateAckPrice.End
+
+Program.Sub.getDataTable.Start
+v.Local.sSQL.Declare
+v.Local.iCNT.Declare
+v.Local.sFilter.Declare
+v.Local.sPD.Declare
+v.Local.sLineType.Declare
+v.Local.sShipTo.Declare
+v.Local.bTaxRead.Declare
+v.Local.fTotal.Declare
+v.Local.fTemp.Declare
+v.Local.iCeiling.Declare
+v.Local.f_Y_Record.Declare
+v.Local.fLastRecord_O.Declare
+v.Local.f_QTY.Declare
+f.Intrinsic.Control.Try
+
+	f.ODBC.Connection!con.OpenCompanyConnection
+		f.Intrinsic.String.Build("Select Terminal, RPTID, ORDER_NO, RECORD_NO, SEQUENCE, ORDER_SUFFIX, CUSTOMER, LINE_TYPE, QTY_ORDER, EXTENSION as PRE_EXTENSION, LEFT(PROD_LINE, 2) as PROD_LINE, PRICE_4 AS PRE_PRICE_4, ORDER_NO+RECORD_NO AS SHIP_TO From BI_ACKNWLDGMNT where Line_Type in ('L','O','X', 'Y', 'T') and RPTID = '{0}' and Terminal = '{1}' Order By Order_No, Sequence", v.Passed.BIP_REPORTID, v.Passed.BIP_Terminal, v.Local.sSQL)
+		f.Data.DataTable.CreateFromSQL("printDT", "con", v.Local.sSQL)
+'		f.Data.Dictionary.CreateFromSQL("PL_DiscountDict", "con", "Select Customer+Ship_To+Product_Line as Index_Table, PL_DISCNT from GCG_5627_CUST_MAINT")
+'		f.Data.Dictionary.CreateFromSQL("Cust_MarginDict", "con", "Select Customer+Ship_To+Product_Line as Index_Table, Cust_Margin from GCG_5627_CUST_MAINT")
+		f.Data.Dictionary.CreateFromSQL("PL_DiscountDict", "con", "Select Ship_To+Product_Line as Index_Table, PL_DISCNT from GCG_5627_CUST_MAINT")
+		f.Data.Dictionary.CreateFromSQL("Cust_MarginDict", "con", "Select Ship_To+Product_Line as Index_Table, Cust_Margin from GCG_5627_CUST_MAINT")
+		f.Data.Dictionary.CreateFromSQL("ShipTo", "con", "Select Order_no+Record_NO, Order_no+Ship_ID from V_Order_Lines")
+		f.Data.Dictionary.CreateFromSQL("Owner", "con", "Select Order_no+order_ship_id, Address_5_Ship from V_ORDER_SHIP_TO")
+		f.Data.Dictionary.CreateFromSQL("newPriceDT", "con", "Select SO_NO+SO_LINE_NO, AKC_PRICE from GCG_5627_Q2SO")
+	f.ODBC.Connection!con.Close
+	
+'	f.Data.DataView.Create("printDT", "loopDV", 22)
+'	f.Data.DataView.ToDataTableDistinct("printDT", "loopDV", "orderNoDT", "Order_No")
+'	
+	f.Intrinsic.Control.For(v.Local.iCNT, 0, v.DataTable.printDT.RowCount--, 1)
+		v.Local.sLineType.Set(v.DataTable.printDT(v.Local.iCNT).Line_Type!FieldValTrim)
+		
+		f.Intrinsic.Control.If(v.Local.sLineType, =, "L")
+			v.Local.sPD.Set(v.DataTable.printDT(v.Local.iCNT).PROD_LINE!FieldValTrim)
+			v.Local.sShipTo.Set(v.DataTable.printDT(v.Local.iCNT).SHIP_TO!FieldValTrim)
+		f.Intrinsic.Control.EndIf
+		
+		f.Intrinsic.Control.If(v.Local.sLineType, =, "O")
+			f.Data.DataTable.SetValue("printDT", v.Local.iCNT, "PROD_LINE", v.Local.sPD, "SHIP_TO", v.Local.sShipTo)
+		f.Intrinsic.Control.EndIf
+		
+		f.Intrinsic.Control.If(v.Local.sLineType, =, "X")
+			f.Data.DataTable.SetValue("printDT", v.Local.iCNT, "PROD_LINE", v.Local.sPD, "SHIP_TO", v.Local.sShipTo)
+		f.Intrinsic.Control.EndIf
+		
+		f.Intrinsic.Control.If(v.Local.sLineType, =, "Y")
+			f.Data.DataTable.SetValue("printDT", v.Local.iCNT, "PROD_LINE", v.Local.sPD, "SHIP_TO", v.Local.sShipTo)
+		f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.Next(v.Local.iCNT)
+
+	
+	f.Data.Dictionary.SetDefaultReturn("ShipTo", "      ")
+	f.Data.DataTable.FillFromDictionary("printDT", "ShipTo", "SHIP_TO", "SHIP_TO")
+	f.Data.Dictionary.Close("ShipTo")
+	
+	f.Data.Dictionary.SetDefaultReturn("Owner", "      ")
+	f.Data.DataTable.FillFromDictionary("printDT", "Owner", "SHIP_TO", "SHIP_TO")
+	f.Data.Dictionary.Close("Owner")
+	
+	'f.Data.DataTable.SetValueFormat("printDT", -1, "Customer", "Customer", ">")
+	f.Data.DataTable.SetValueFormat("printDT", -1, "SHIP_TO", "SHIP_TO", "@@@@@@")
+	f.Data.DataTable.SetValueFormat("printDT", -1, "PROD_LINE", "PROD_LINE", "@@")
+	f.Data.DataTable.AddExpressionColumn("printDT", "allKey", "String", "SHIP_TO+PROD_LINE")
+	
+	f.Data.DataTable.AddExpressionColumn("printDT", "orderkey", "String", "ORDER_NO+RECORD_NO")
+	
+	f.Data.DataTable.AddColumn("printDT", "PL_Discount", "Float")
+	f.Data.Dictionary.SetDefaultReturn("PL_DiscountDict", 0)
+	f.Data.DataTable.FillFromDictionary("printDT", "PL_DiscountDict", "allKey", "PL_Discount")
+	
+	f.Data.DataTable.AddColumn("printDT", "Cust_Margin", "Float")
+	f.Data.Dictionary.SetDefaultReturn("Cust_MarginDict", 0)
+	f.Data.DataTable.FillFromDictionary("printDT", "Cust_MarginDict", "allKey", "Cust_Margin")
+
+	f.Data.DataTable.AddExpressionColumn("printDT", "PL_Discount_1", "Float", "1-PL_Discount")
+	f.Data.DataTable.AddExpressionColumn("printDT", "Cust_Margin_1", "Float", "1-Cust_Margin")
+	f.Data.DataTable.AddExpressionColumn("printDT", "PRICE_4_1", "Float", "PRE_PRICE_4*PL_Discount_1")
+	f.Data.DataTable.AddExpressionColumn("printDT", "EXTENSION_1", "Float", "PRE_EXTENSION*PL_Discount_1")
+
+	f.Data.DataTable.AddColumn("printDT", "PRICE_4", "Float")
+	f.Data.DataTable.SetValueFormat("printDT", -1, "PRICE_4_1", "PRICE_4", "0.00")
+	f.Data.DataTable.AddColumn("printDT", "EXTENSION", "Float")
+	f.Data.DataTable.SetValueFormat("printDT", -1, "EXTENSION_1", "EXTENSION", "0.00")
+	
+	
+	'****************
+	f.Data.DataTable.FillFromDictionary("printDT", "newPriceDT", "orderkey", "PRICE_4")
+	f.Data.DataTable.FillFromDictionary("printDT", "newPriceDT", "orderkey", "EXTENSION")
+	
+	f.Data.DataTable.AcceptChanges("printDT")	
+	f.Data.DataView.Create("printDT", "printDV", 22)
+	f.Data.DataView.ToDataTable("printDT", "printDV", "saveDT")
+	f.Data.DataTable.RemoveColumn("saveDT", "CUSTOMER")
+	f.Data.DataTable.RemoveColumn("saveDT", "orderkey")
+	f.Data.DataTable.RemoveColumn("saveDT", "PRE_EXTENSION")
+	f.Data.DataTable.RemoveColumn("saveDT", "PROD_LINE")
+	f.Data.DataTable.RemoveColumn("saveDT", "PRE_PRICE_4")
+	f.Data.DataTable.RemoveColumn("saveDT", "SHIP_TO")
+	f.Data.DataTable.RemoveColumn("saveDT", "allKey")
+	f.Data.DataTable.RemoveColumn("saveDT", "PL_Discount")
+	f.Data.DataTable.RemoveColumn("saveDT", "Cust_Margin")
+	
+	f.Data.DataTable.RemoveColumn("saveDT", "PL_Discount_1")
+	f.Data.DataTable.RemoveColumn("saveDT", "Cust_Margin_1")
+	f.Data.DataTable.RemoveColumn("saveDT", "PRICE_4_1")
+	f.Data.DataTable.RemoveColumn("saveDT", "EXTENSION_1")
+	
+	
+	
+	f.Intrinsic.Control.For(v.Local.iCNT, 0, v.DataTable.saveDT.RowCount--, 1)
+		v.Local.sLineType.Set(v.DataTable.saveDT(v.Local.iCNT).Line_Type!FieldValTrim)
+		
+		f.Intrinsic.Control.If(v.Local.sLineType, =, "L")
+			v.Local.f_Y_Record.Set(0)
+			v.Local.fLastRecord_O.Set(0)
+			v.Local.bTaxRead.Set(False)
+			
+			v.Local.fTemp.Set(v.DataTable.saveDT(v.Local.iCNT).PRICE_4!FieldValTrim)
+			f.Intrinsic.Math.Round(v.Local.fTemp, 2, v.Local.fTemp)
+			'f.Intrinsic.Math.Ceiling(v.Local.fTemp, v.Local.iCeiling)
+			f.Data.DataTable.SetValue("saveDT", v.Local.iCNT, "PRICE_4", v.Local.fTemp)
+			v.Local.fTemp.Set(v.DataTable.saveDT(v.Local.iCNT).QTY_ORDER!FieldValTrim)
+			f.Intrinsic.Math.Mult(v.Local.fTemp, v.Local.fTemp, v.Local.fLastRecord_O)
+			f.Data.DataTable.SetValue("saveDT", v.Local.iCNT, "EXTENSION", v.Local.fLastRecord_O)
+			v.Local.fTemp.Set(0)
+		f.Intrinsic.Control.EndIf
+		
+		f.Intrinsic.Control.If(v.Local.sLineType, =, "O")
+			f.Data.DataTable.SetValue("saveDT", v.Local.iCNT, "EXTENSION", v.Local.fLastRecord_O, "PRICE_4", v.Local.fLastRecord_O)
+			v.Local.fTemp.Set(v.DataTable.saveDT(v.Local.iCNT).EXTENSION!FieldValTrim)
+			f.Intrinsic.Math.Add(v.Local.fTotal, v.Local.fTemp, v.Local.fTotal)
+			f.Intrinsic.Math.Add(v.Local.f_Y_Record, v.Local.fTemp, v.Local.f_Y_Record)
+			v.Local.fTemp.Set(0)
+			v.Local.fLastRecord_O.Set(0)
+		f.Intrinsic.Control.EndIf
+		
+		f.Intrinsic.Control.If(v.Local.sLineType, =, "X")
+			f.Intrinsic.Control.If(v.Local.bTaxRead)
+				v.Local.bTaxRead.Set(False)
+			f.Intrinsic.Control.Else
+				v.Local.bTaxRead.Set(True)
+				v.Local.fTemp.Set(v.DataTable.saveDT(v.Local.iCNT).PRICE_4!FieldValTrim)
+				f.Intrinsic.Math.Add(v.Local.fTotal, v.Local.fTemp, v.Local.fTotal)
+				f.Intrinsic.Math.Add(v.Local.f_Y_Record, v.Local.fTemp, v.Local.f_Y_Record)
+				v.Local.fTemp.Set(0)
+			f.Intrinsic.Control.EndIf
+		f.Intrinsic.Control.EndIf
+		
+		f.Intrinsic.Control.If(v.Local.sLineType, =, "Y")
+			f.Data.DataTable.SetValue("saveDT", v.Local.iCNT, "EXTENSION", v.Local.f_Y_Record, "PRICE_4", v.Local.f_Y_Record)
+			v.Local.fTemp.Set(0)
+			v.Local.f_Y_Record.Set(0)
+		f.Intrinsic.Control.EndIf
+		
+		f.Intrinsic.Control.If(v.Local.sLineType, =, "T")
+			f.Data.DataTable.SetValue("saveDT", v.Local.iCNT, "EXTENSION", v.Local.fTotal, "PRICE_4", v.Local.fTotal)
+			v.Local.fTemp.Set(0)
+			v.Local.fTotal.Set(0)
+		f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.Next(v.Local.iCNT)
+
+	f.ODBC.Connection!con.OpenCompanyConnection
+		f.Data.DataTable.SaveToDB("saveDT", "con", "BI_ACKNWLDGMNT", "Terminal*!*RPTID*!*ORDER_NO*!*RECORD_NO*!*SEQUENCE*!*ORDER_SUFFIX*!*LINE_TYPE*!*QTY_ORDER", 256)
+	f.ODBC.Connection!con.Close
+	
+	
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.getDataTable.End
+
+Program.Sub.qtyChangeQuote.Start
+v.Local.sOrderNumber.Declare
+v.Local.sCustomer.Declare
+v.Local.sShipToCode.Declare
+v.Local.sPartNumber.Declare
+v.Local.sProductLine.Declare
+v.Local.fPrice.Declare
+v.Local.fQty.Declare
+v.Local.fPL_Discount.Declare
+v.Local.fCust_Margin.Declare
+v.Local.sSQL.Declare
+v.Local.sOwnersGroup.Declare
+v.Local.sOG_Check.Declare
+v.Local.sPL_Check.Declare
+v.Local.sLine.Declare
+'v.Passed.000060 - Order Number (Not Padded)
+'v.Passed.000088 - Ship To
+'v.Passed.000052 - Part Number (No Rev)
+'v.Passed.000053 - Rev
+'v.Passed.000007 - QTY
+'v.Passed.000009 - Current Price
+'v.Passed.
+
+
+f.Intrinsic.Control.Try
+
+	f.Intrinsic.String.LPad(v.Passed.000060, "0", 7, v.Local.sOrderNumber)
+	v.Local.sShipToCode.Set(v.Passed.000088)
+	f.Intrinsic.String.RPad(v.Passed.000052, " ", 17, v.Local.sPartNumber)
+	f.Intrinsic.String.Build("{0}{1}", v.Local.sPartNumber, v.Passed.000053, v.Local.sPartNumber)
+	
+	v.Local.sLine.Set(v.Passed.000051)
+	f.Intrinsic.String.LPad(v.Local.sLine, "0", 3, v.Local.sLine)
+	f.Intrinsic.String.RPad(v.Local.sLine, "0", 4, v.Local.sLine)
+	
+	f.ODBC.Connection!con.OpenCompanyConnection
+		f.Intrinsic.String.Build("Select Address_5_Ship from V_QUOTE_SHIP_TO where Quote_no = '{0}' and ship_id = '{1}'", v.Local.sOrderNumber, v.Local.sShipToCode, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sOwnersGroup)
+		f.Intrinsic.String.Build("Select AMT_Price from Inventory_Mstr where Part = '{0}'", v.Local.sPartNumber, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.fPrice)
+		f.Intrinsic.String.Build("Select Product_Line from Inventory_Mstr where Part = '{0}'", v.Local.sPartNumber, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sProductLine)
+		
+		f.Intrinsic.String.Build("Select Ship_To from GCG_5627_CUST_MAINT where Ship_to = '{0}'", v.Local.sOwnersGroup.Trim, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sOG_Check)
+		
+		f.Intrinsic.String.Build("Select Product_Line from GCG_5627_CUST_MAINT where Product_Line = '{0}' and Ship_To = '{1}'", v.Local.sProductLine.Trim, v.Local.sOwnersGroup.Trim,  v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sPL_Check)
+		
+		f.Intrinsic.String.Trim(v.Local.sProductLine, v.Local.sProductLine)
+		f.Intrinsic.Control.If(v.Local.sPL_Check.Trim, =, v.Local.sProductLine.Trim)
+		f.Intrinsic.Control.Else
+			v.Local.sProductLine.Set("  ")
+		f.Intrinsic.Control.EndIf
+		
+		'f.Intrinsic.String.Build("Select PL_DISCNT from GCG_5627_CUST_MAINT where Customer = '{0}' and Product_Line = '{1}' and Ship_To = '{2}'", v.Local.sCustomer.Trim, v.Local.sProductLine.Trim, v.Local.sShipToCode.Trim,  v.Local.sSQL)
+		f.Intrinsic.String.Build("Select PL_DISCNT from GCG_5627_CUST_MAINT where Product_Line = '{0}' and Ship_To = '{1}'", v.Local.sProductLine, v.Local.sOwnersGroup.Trim,  v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.fPL_Discount)
+		'f.Intrinsic.String.Build("Select CUST_MARGIN from GCG_5627_CUST_MAINT where Customer = '{0}' and Product_Line = '{1}' and Ship_To = '{2}'", v.Local.sCustomer.Trim, v.Local.sProductLine.Trim, v.Local.sShipToCode.Trim, v.Local.sSQL)
+		f.Intrinsic.String.Build("Select CUST_MARGIN from GCG_5627_CUST_MAINT where Product_Line = '{0}' and Ship_To = '{1}'", v.Local.sProductLine, v.Local.sOwnersGroup.Trim, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.fCust_Margin)
+	f.ODBC.Connection!con.Close
+	
+	v.Local.fQty.Set(v.Passed.000007)
+	'f.Intrinsic.Math.Mult(v.Local.fPrice, v.Local.fQty, v.Local.fPrice)
+	
+	f.Intrinsic.Control.If(v.Local.sOG_Check.Trim, =, "")
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.CallSub(calculateAckPrice, "fPassedInventoryPrice", v.Local.fPrice, "fpassedPL_Discount", v.Local.fPL_Discount, "fpassedCust_Margin", v.Local.fCust_Margin)
+	
+	'v.Passed.000009.Set(v.Global.sStdPrice)
+	''v.Passed.GAB-TEXT-1.Set(v.Global.sAckPrice)
+	
+	v.Passed.000009.Set(v.Global.sAckPrice)
+	'v.Passed.GAB-TEXT-1.Set(v.Global.sStdPrice)
+	
+	f.Data.DataTable.DeleteRow("savePriceDT")
+	f.Data.DataTable.AcceptChanges("savePriceDT")
+	
+	f.Data.DataTable.AddRow("savePriceDT", "QUOTE_NO", v.Local.sOrderNumber, "QUOTE_LINE_NO",  v.Local.sLine, "INPUT_PRICE", v.Global.sStdPrice, "AKC_PRICE",  v.Global.sAckPrice, "MARGIN_PRICE", 0.0, "LAST_GSS", v.Caller.User, "LAST_DATE", v.Ambient.Date.PervasiveDate)
+	
+	f.Data.DataTable.AcceptChanges("savePriceDT")
+	
+	f.ODBC.Connection!con.OpenCompanyConnection
+	 	f.Data.DataTable.SaveToDB("savePriceDT", "con", "GCG_5627_Q2SO", "QUOTE_NO*!*QUOTE_LINE_NO", 256)
+	f.ODBC.Connection!con.Close
+	
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.qtyChangeQuote.End
+
+Program.Sub.loadPrice.Start
+v.Local.sOrderNumber.Declare
+v.Local.sCustomer.Declare
+v.Local.sQuote.Declare
+v.Local.sShipToCode.Declare
+v.Local.sPartNumber.Declare
+v.Local.sProductLine.Declare
+v.Local.fPrice.Declare
+v.Local.fQty.Declare
+v.Local.fPL_Discount.Declare
+v.Local.fCust_Margin.Declare
+v.Local.sSQL.Declare
+v.Local.sOwnersGroup.Declare
+v.Local.sOG_Check.Declare
+v.Local.sPL_Check.Declare
+v.Local.sLine.Declare
+v.Local.fAKC_Price.Declare
+v.Local.fInputPrice.Declare
+'v.Passed.000060 - Order Number (Not Padded)
+'v.Passed.000088 - Ship To
+'v.Passed.000052 - Part Number (No Rev)
+'v.Passed.000053 - Rev
+'v.Passed.000007 - QTY
+'v.Passed.000009 - Current Price
+f.Intrinsic.Control.Try	
+	f.Intrinsic.String.LPad(v.Passed.000060, "0", 7, v.Local.sOrderNumber)
+	v.Local.sShipToCode.Set(v.Passed.000088)
+	f.Intrinsic.String.RPad(v.Passed.000052, " ", 17, v.Local.sPartNumber)
+	f.Intrinsic.String.Build("{0}{1}", v.Local.sPartNumber, v.Passed.000053, v.Local.sPartNumber)
+	
+	v.Local.sLine.Set(v.Passed.000051)
+	f.Intrinsic.String.LPad(v.Local.sLine, "0", 3, v.Local.sLine)
+	f.Intrinsic.String.RPad(v.Local.sLine, "0", 4, v.Local.sLine)
+	
+	f.ODBC.Connection!con.OpenCompanyConnection
+		f.Intrinsic.String.Build("Select Quote from V_Order_Header where Order_No = '{0}'", v.Local.sOrderNumber, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sQuote)
+	 	f.Intrinsic.String.Build("Select AKC_PRICE from GCG_5627_Q2SO where SO_NO = '{0}' and SO_LINE_NO = '{1}' and QUOTE_NO = '{2}'", v.Local.sOrderNumber, v.Local.sLine, v.Local.sQuote, v.Local.sSQL)
+	 	f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.fAKC_Price)
+	 	f.Intrinsic.String.Build("Select INPUT_PRICE from GCG_5627_Q2SO where SO_NO = '{0}' and SO_LINE_NO = '{1}' and QUOTE_NO = '{2}'", v.Local.sOrderNumber, v.Local.sLine, v.Local.sQuote, v.Local.sSQL)
+	 	f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.fInputPrice)
+	f.ODBC.Connection!con.Close
+	
+	v.Passed.GAB-TEXT-1.Set(v.Local.fAKC_Price)
+	'v.Passed.GAB-TEXT-1.Set(v.Local.fInputPrice)
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.loadPrice.End
+
+Program.Sub.loadQuote.Start
+v.Local.sOrderNumber.Declare
+v.Local.sCustomer.Declare
+v.Local.sQuote.Declare
+v.Local.sShipToCode.Declare
+v.Local.sPartNumber.Declare
+v.Local.sProductLine.Declare
+v.Local.fPrice.Declare
+v.Local.fQty.Declare
+v.Local.fPL_Discount.Declare
+v.Local.fCust_Margin.Declare
+v.Local.sSQL.Declare
+v.Local.sOwnersGroup.Declare
+v.Local.sOG_Check.Declare
+v.Local.sPL_Check.Declare
+v.Local.sLine.Declare
+'v.Passed.000060 - Order Number (Not Padded)
+'v.Passed.000088 - Ship To
+'v.Passed.000052 - Part Number (No Rev)
+'v.Passed.000053 - Rev
+'v.Passed.000007 - QTY
+'v.Passed.000009 - Current Price
+'v.Passed.
+
+f.Intrinsic.Control.Try
+
+	f.Intrinsic.String.LPad(v.Passed.000060, "0", 7, v.Local.sOrderNumber)
+	v.Local.sShipToCode.Set(v.Passed.000088)
+	f.Intrinsic.String.RPad(v.Passed.000052, " ", 17, v.Local.sPartNumber)
+	f.Intrinsic.String.Build("{0}{1}", v.Local.sPartNumber, v.Passed.000053, v.Local.sPartNumber)
+	
+	v.Local.sLine.Set(v.Passed.000051)
+	f.Intrinsic.String.LPad(v.Local.sLine, "0", 3, v.Local.sLine)
+	f.Intrinsic.String.RPad(v.Local.sLine, "0", 4, v.Local.sLine)
+	
+	f.ODBC.Connection!con.OpenCompanyConnection
+		f.Intrinsic.String.Build("Select Quote from V_Order_Header where Order_No = '{0}'", v.Local.sCustomer, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sQuote)
+	 	f.Intrinsic.String.Build("Select * from GCG_5627_Q2SO where SO_NO = '{0}' and SO_LINE_NO = '{1}' and Quote = '{2}'", v.Local.sOrderNumber, v.Local.sLine, v.Local.sQuote, v.Local.sSQL)
+	f.ODBC.Connection!con.Close
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.loadQuote.End
+
+Program.Sub.calcMargin.Start
+v.Local.sOrderNumber.Declare
+v.Local.sCustomer.Declare
+v.Local.sShipToCode.Declare
+v.Local.sPartNumber.Declare
+v.Local.sProductLine.Declare
+v.Local.fPrice.Declare
+v.Local.fQty.Declare
+v.Local.fPL_Discount.Declare
+v.Local.fCust_Margin.Declare
+v.Local.sSQL.Declare
+v.Local.sOwnersGroup.Declare
+v.Local.sOG_Check.Declare
+v.Local.sPL_Check.Declare
+v.Local.sQuote.Declare
+v.Local.sLine.Declare
+'v.Passed.000060 - Order Number (Not Padded)
+'v.Passed.000022 - Ship To
+'v.Passed.000052 - Part Number (No Rev)
+'v.Passed.000053 - Rev
+'v.Passed.000007 - QTY
+'v.Passed.000009 - Current Price
+'v.Passed.
+
+
+f.Intrinsic.Control.Try
+
+	f.Intrinsic.String.LPad(v.Passed.000060, "0", 7, v.Local.sOrderNumber)
+	v.Local.sShipToCode.Set(v.Passed.000022)
+	f.Intrinsic.String.RPad(v.Passed.000052, " ", 17, v.Local.sPartNumber)
+	f.Intrinsic.String.Build("{0}{1}", v.Local.sPartNumber, v.Passed.000053, v.Local.sPartNumber)
+	'format line number
+	v.Local.sLine.Set(v.Passed.000051)
+	f.Intrinsic.String.LPad(v.Local.sLine, "0", 3, v.Local.sLine)
+	f.Intrinsic.String.RPad(v.Local.sLine, "0", 4, v.Local.sLine)
+	
+	f.ODBC.Connection!con.OpenCompanyConnection
+		f.Intrinsic.String.Build("Select Address_5_Ship from V_ORDER_SHIP_TO where order_no = '{0}' and order_ship_id = '{1}'", v.Local.sOrderNumber, v.Local.sShipToCode, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sOwnersGroup)
+'		f.Intrinsic.String.Build("Select AMT_Price from Inventory_Mstr where Part = '{0}'", v.Local.sPartNumber, v.Local.sSQL)
+'		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.fPrice)
+		f.Intrinsic.String.Build("Select Product_Line from Inventory_Mstr where Part = '{0}'", v.Local.sPartNumber, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sProductLine)
+		
+		f.Intrinsic.String.Build("Select Ship_To from GCG_5627_CUST_MAINT where Ship_to = '{0}'", v.Local.sOwnersGroup.Trim, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sOG_Check)
+		
+		f.Intrinsic.String.Build("Select Quote from V_Order_Header where Order_No = '{0}'", v.Local.sOrderNumber, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sQuote)
+		
+		f.Intrinsic.String.Build("Select Product_Line from GCG_5627_CUST_MAINT where Product_Line = '{0}' and Ship_To = '{1}'", v.Local.sProductLine.Trim, v.Local.sOwnersGroup.Trim,  v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sPL_Check)
+		
+		f.Intrinsic.String.Trim(v.Local.sProductLine, v.Local.sProductLine)
+		f.Intrinsic.Control.If(v.Local.sPL_Check.Trim, =, v.Local.sProductLine.Trim)
+		f.Intrinsic.Control.Else
+			v.Local.sProductLine.Set("  ")
+		f.Intrinsic.Control.EndIf
+		'f.Intrinsic.String.Build("Select PL_DISCNT from GCG_5627_CUST_MAINT where Customer = '{0}' and Product_Line = '{1}' and Ship_To = '{2}'", v.Local.sCustomer.Trim, v.Local.sProductLine.Trim, v.Local.sShipToCode.Trim,  v.Local.sSQL)
+		f.Intrinsic.String.Build("Select PL_DISCNT from GCG_5627_CUST_MAINT where Product_Line = '{0}' and Ship_To = '{1}'", v.Local.sProductLine, v.Local.sOwnersGroup.Trim,  v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.fPL_Discount)
+		'f.Intrinsic.String.Build("Select CUST_MARGIN from GCG_5627_CUST_MAINT where Customer = '{0}' and Product_Line = '{1}' and Ship_To = '{2}'", v.Local.sCustomer.Trim, v.Local.sProductLine.Trim, v.Local.sShipToCode.Trim, v.Local.sSQL)
+		f.Intrinsic.String.Build("Select CUST_MARGIN from GCG_5627_CUST_MAINT where Product_Line = '{0}' and Ship_To = '{1}'", v.Local.sProductLine, v.Local.sOwnersGroup.Trim, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.fCust_Margin)
+	f.ODBC.Connection!con.Close
+	
+	v.Local.fQty.Set(v.Passed.000007)
+	'f.Intrinsic.Math.Mult(v.Local.fPrice, v.Local.fQty, v.Local.fPrice)
+	'
+	f.Intrinsic.Control.If(v.Passed.000009, =, 0)
+	f.Intrinsic.Control.Else
+		v.Local.fPrice.Set(v.Passed.000009)
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.If(v.Local.sOG_Check.Trim, =, "")
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.If(v.Caller.Hook, =, 12140)
+		v.Local.fPrice.Set(v.Passed.000009)
+	f.Intrinsic.Control.EndIf
+	'fpassedCust_Margin
+
+	f.Intrinsic.Control.CallSub(calculateAckPrice, "fPassedInventoryPrice", v.Local.fPrice, "fpassedPL_Discount", v.Local.fPL_Discount, "fpassedCust_Margin", v.Local.fCust_Margin)
+	
+'	v.Passed.000009.Set(v.Global.sStdPrice)
+'	v.Passed.GAB-TEXT-1.Set(v.Global.sAckPrice)
+
+	v.Passed.000009.Set(v.Global.sMrgPrice)
+	v.Passed.GAB-TEXT-1.Set( v.Local.fPrice)
+	
+	f.Data.DataTable.DeleteRow("savePriceDT")
+	f.Data.DataTable.AcceptChanges("savePriceDT")
+	
+	f.Data.DataTable.AddRow("savePriceDT", "QUOTE_NO", v.Local.sQuote, "QUOTE_LINE_NO",  v.Local.sLine, "INPUT_PRICE", v.Local.fPrice, "AKC_PRICE",  v.Local.fPrice, "MARGIN_PRICE", v.Global.sMrgPrice, "SO_NO", v.Local.sOrderNumber, "SO_LINE_NO", v.Local.sLine, "LAST_GSS", v.Caller.User, "LAST_DATE", v.Ambient.Date.PervasiveDate)
+	
+	f.Data.DataTable.AcceptChanges("savePriceDT")
+	
+	f.ODBC.Connection!con.OpenCompanyConnection
+	 	f.Data.DataTable.SaveToDB("savePriceDT", "con", "GCG_5627_Q2SO", "QUOTE_NO*!*QUOTE_LINE_NO*!*SO_NO*!*SO_LINE_NO", 256)
+	f.ODBC.Connection!con.Close
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.calcMargin.End

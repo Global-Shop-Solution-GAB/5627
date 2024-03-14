@@ -1,0 +1,789 @@
+Program.Sub.ScreenSU.Start
+Gui.F_Schema..Create
+Gui.F_Schema..Size(8070,11880)
+Gui.F_Schema..MinX(0)
+Gui.F_Schema..MinY(0)
+Gui.F_Schema..Position(0,0)
+Gui.F_Schema..BackColor(-2147483633)
+Gui.F_Schema..MousePointer(0)
+Gui.F_Schema..Event(UnLoad,Form_UnLoad)
+Gui.F_Schema..Caption("Product Line and Customer Margin Maintenance")
+Gui.F_Schema.GsGcSchema.Create(GsGridControl)
+Gui.F_Schema.GsGcSchema.Size(7650,10290)
+Gui.F_Schema.GsGcSchema.Position(105,885)
+Gui.F_Schema.GsGcSchema.Event(RowCellClick,GsGcSchema_RowCellClick)
+Gui.F_Schema.GsGcSchema.Anchor(15)
+Gui.F_Schema.lbl1.Create(Label,"Customer",False,855,255,0,120,135,True,0,"Arial",8,-2147483633,0)
+Gui.F_Schema.txt_Schema_Customer.Create(TextBox,"",False,1215,300,0,180,375,True,0,"Arial",8,-2147483643,1)
+Gui.F_Schema.txt_Schema_Customer.MaxLength(6)
+Gui.F_Schema.cmd_Schema_Customer_Brw.Create(Button)
+Gui.F_Schema.cmd_Schema_Customer_Brw.Size(495,375)
+Gui.F_Schema.cmd_Schema_Customer_Brw.Position(1440,330)
+Gui.F_Schema.cmd_Schema_Customer_Brw.Caption("^")
+Gui.F_Schema.cmd_Schema_Customer_Brw.Event(Click,cmd_Schema_Customer_Brw_Click)
+Gui.F_Schema.cmd_Schema_Customer_Brw.Visible(False)
+Gui.F_Schema.cmd_Schema_ShipTo_Brw.Create(Button)
+Gui.F_Schema.cmd_Schema_ShipTo_Brw.Size(495,375)
+Gui.F_Schema.cmd_Schema_ShipTo_Brw.Position(1500,330)
+Gui.F_Schema.cmd_Schema_ShipTo_Brw.Caption("^")
+Gui.F_Schema.cmd_Schema_ShipTo_Brw.Event(Click,cmd_Schema_ShipTo_Brw_Click)
+Gui.F_Schema.lbl2.Create(Label,"Owner Group",True,855,255,0,180,135,True,0,"Arial",8,-2147483633,0)
+Gui.F_Schema.txt_Schema_ShipTo.Create(TextBox,"",True,1215,300,0,180,375,True,0,"Arial",8,-2147483643,1)
+Gui.F_Schema.txt_Schema_ShipTo.MaxLength(6)
+Gui.F_Schema.cmd_Schema_PL_Brw.Create(Button)
+Gui.F_Schema.cmd_Schema_PL_Brw.Size(495,375)
+Gui.F_Schema.cmd_Schema_PL_Brw.Position(2760,330)
+Gui.F_Schema.cmd_Schema_PL_Brw.Caption("^")
+Gui.F_Schema.cmd_Schema_PL_Brw.Event(Click,cmd_Schema_PL_Brw_Click)
+Gui.F_Schema.lbl3.Create(Label,"PL",True,420,255,0,2190,135,True,0,"Arial",8,-2147483633,0)
+Gui.F_Schema.txt_Schema_PL.Create(TextBox,"",True,495,300,0,2175,375,True,0,"Arial",8,-2147483643,1)
+Gui.F_Schema.txt_Schema_PL.MaxLength(2)
+Gui.F_Schema.cmd_Schema_Search.Create(Button)
+Gui.F_Schema.cmd_Schema_Search.Size(855,375)
+Gui.F_Schema.cmd_Schema_Search.Position(3525,330)
+Gui.F_Schema.cmd_Schema_Search.Caption("Search")
+Gui.F_Schema.cmd_Schema_Search.Event(Click,cmd_Schema_Search_Click)
+Gui.F_Schema.cmd_Schema_Upload.Create(Button)
+Gui.F_Schema.cmd_Schema_Upload.Size(855,375)
+Gui.F_Schema.cmd_Schema_Upload.Position(6885,345)
+Gui.F_Schema.cmd_Schema_Upload.Caption("Upload")
+Gui.F_Schema.cmd_Schema_Upload.Event(Click,cmd_Schema_Upload_Click)
+Gui.F_Schema.cmd_Schema_Upload.Anchor(9)
+Gui.F_Schema.optOverwrite.Create(Option)
+Gui.F_Schema.optOverwrite.Size(1155,255)
+Gui.F_Schema.optOverwrite.Position(5535,45)
+Gui.F_Schema.optOverwrite.Caption("Overwrite")
+Gui.F_Schema.optOverwrite.Anchor(9)
+Gui.F_Schema.optAppend.Create(Option)
+Gui.F_Schema.optAppend.Size(960,255)
+Gui.F_Schema.optAppend.Position(6765,30)
+Gui.F_Schema.optAppend.Caption("Append")
+Gui.F_Schema.optAppend.Anchor(9)
+Gui.F_RecordScreen..Create
+Gui.F_RecordScreen..Size(3630,2865)
+Gui.F_RecordScreen..MinX(0)
+Gui.F_RecordScreen..MinY(0)
+Gui.F_RecordScreen..Position(0,0)
+Gui.F_RecordScreen..BackColor(-2147483633)
+Gui.F_RecordScreen..MousePointer(0)
+Gui.F_RecordScreen..Event(UnLoad,F_RecordScreen_UnLoad)
+Gui.F_RecordScreen..Caption("Records")
+Gui.F_RecordScreen.lbl1.Create(Label,"Customer",False,1245,255,0,120,210,True,1,"Arial",8,-2147483633,0)
+Gui.F_RecordScreen.lbl2.Create(Label,"Owner Group",True,1245,255,0,120,150,True,1,"Arial",8,-2147483633,0)
+Gui.F_RecordScreen.lbl3.Create(Label,"Product Line",True,1245,255,0,120,600,True,1,"Arial",8,-2147483633,0)
+Gui.F_RecordScreen.lbl4.Create(Label,"PL Discount",True,1245,255,0,120,1005,True,1,"Arial",8,-2147483633,0)
+Gui.F_RecordScreen.lbl5.Create(Label,"Cust . Margin",True,1245,255,0,120,1440,True,1,"Arial",8,-2147483633,0)
+Gui.F_RecordScreen.txt_Record_Customer.Create(TextBox,"",False,1215,300,0,1440,120,True,0,"Arial",8,-2147483643,1)
+Gui.F_RecordScreen.txt_Record_Customer.MaxLength(6)
+Gui.F_RecordScreen.txt_Record_ShipTo.Create(TextBox,"",True,1215,300,0,1440,105,True,0,"Arial",8,-2147483643,1)
+Gui.F_RecordScreen.txt_Record_ShipTo.MaxLength(6)
+Gui.F_RecordScreen.txt_Record_PL.Create(TextBox,"",True,1215,300,0,1440,555,True,0,"Arial",8,-2147483643,1)
+Gui.F_RecordScreen.txt_Record_PL.MaxLength(2)
+Gui.F_RecordScreen.txt_Record_PL_Discount.Create(TextBox,"",True,1215,300,0,1440,960,True,0,"Arial",8,-2147483643,1)
+Gui.F_RecordScreen.txt_Record_PL_Discount.NumericOnly(1)
+Gui.F_RecordScreen.txt_Record_Cust_Margin.Create(TextBox,"",True,1215,300,0,1440,1365,True,0,"Arial",8,-2147483643,1)
+Gui.F_RecordScreen.txt_Record_Cust_Margin.NumericOnly(1)
+Gui.F_RecordScreen.cmd_Record_Customer_Brw.Create(Button)
+Gui.F_RecordScreen.cmd_Record_Customer_Brw.Size(450,375)
+Gui.F_RecordScreen.cmd_Record_Customer_Brw.Position(2730,75)
+Gui.F_RecordScreen.cmd_Record_Customer_Brw.Caption("^")
+Gui.F_RecordScreen.cmd_Record_Customer_Brw.Event(Click,cmd_Record_Customer_Brw_Click)
+Gui.F_RecordScreen.cmd_Record_Customer_Brw.Visible(False)
+Gui.F_RecordScreen.cmd_Record_ShipTo_Brw.Create(Button)
+Gui.F_RecordScreen.cmd_Record_ShipTo_Brw.Size(450,375)
+Gui.F_RecordScreen.cmd_Record_ShipTo_Brw.Position(2730,75)
+Gui.F_RecordScreen.cmd_Record_ShipTo_Brw.Caption("^")
+Gui.F_RecordScreen.cmd_Record_ShipTo_Brw.Event(Click,cmd_Record_ShipTo_Brw_Click)
+Gui.F_RecordScreen.cmd_Record_ShipTo_Brw.Visible(False)
+Gui.F_RecordScreen.cmd_Record_PL_Brw.Create(Button)
+Gui.F_RecordScreen.cmd_Record_PL_Brw.Size(450,375)
+Gui.F_RecordScreen.cmd_Record_PL_Brw.Position(2730,510)
+Gui.F_RecordScreen.cmd_Record_PL_Brw.Caption("^")
+Gui.F_RecordScreen.cmd_Record_PL_Brw.Event(Click,cmd_Record_PL_Brw_Click)
+Gui.F_RecordScreen.cmd_Record_Add_Update.Create(Button)
+Gui.F_RecordScreen.cmd_Record_Add_Update.Size(1875,375)
+Gui.F_RecordScreen.cmd_Record_Add_Update.Position(1410,1830)
+Gui.F_RecordScreen.cmd_Record_Add_Update.Caption("ADD/UPDATE")
+Gui.F_RecordScreen.cmd_Record_Add_Update.Event(Click,cmd_Record_Add_Update_Click)
+Program.Sub.ScreenSU.End
+
+Program.Sub.Preflight.Start
+v.Global.bAddRecord.Declare(Boolean, false)
+Program.Sub.Preflight.End
+
+Program.Sub.Main.Start
+f.Intrinsic.Control.CallSub(checkCustomFolder)
+
+f.Intrinsic.Control.CallSub(emptyDT)
+f.Intrinsic.Control.CallSub(loadDisplayDt)
+gui.F_Schema.optAppend.Value(1)
+gui.F_Schema..Show
+'gui.F_RecordScreen..Show
+Program.Sub.Main.End
+
+Program.Sub.ErrorMsg.Start
+v.Local.sError.Declare
+
+'Closes ODBC connection, default to connection : "con"
+'f.Intrinsic.Control.If(v.ODBC!con.State, =, 1)
+'	f.ODBC.Connection!con.Close
+'f.Intrinsic.Control.EndIf
+
+'Generic Error message.
+f.Intrinsic.String.Build("Project GCG_5627.g2u {0}{0}Subroutine: {1}{0}Error: {2} with Description: {3}", v.Ambient.NewLine, v.Args.CurrentSub, v.Ambient.ErrorNumber, v.Ambient.ErrorDescription, v.Local.sError)
+f.Intrinsic.UI.Msgbox(v.Local.sError)
+Program.Sub.ErrorMsg.End
+
+Program.Sub.emptyDT.Start
+f.Intrinsic.Control.Try
+	f.Data.DataTable.Create("displayDT", true)
+	f.Data.DataTable.AddColumn("displayDT", "Customer", "String")
+	f.Data.DataTable.AddColumn("displayDT", "Customer_Name", "String")
+	f.Data.DataTable.AddColumn("displayDT", "Ship_To", "String")
+	f.Data.DataTable.AddColumn("displayDT", "City", "String")
+	f.Data.DataTable.AddColumn("displayDT", "State", "String")
+	f.Data.DataTable.AddColumn("displayDT", "Product_Line", "String")
+	f.Data.DataTable.AddColumn("displayDT", "PL_Discnt", "Float")
+	f.Data.DataTable.AddColumn("displayDT", "Cust_Margin", "Float")
+	f.Data.DataTable.AddColumn("displayDT", "Update", "String", "Update")
+	f.Data.DataTable.AddColumn("displayDT", "Delete", "String", "Delete")
+	
+	f.Data.DataView.Create("displayDT", "displayDV", 22)
+	gui.F_Schema.GsGcSchema.AddGridviewFromDataview("displayGV", "displayDT", "displayDV")
+	gui.F_Schema.GsGcSchema.MainView("displayGV")
+	
+	f.Intrinsic.Control.CallSub(loadGridProperties)
+	f.Intrinsic.Control.CallSub(SetContextMenus)
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.emptyDT.End
+
+Program.Sub.loadGridProperties.Start
+v.Local.iCnt.Declare
+v.Local.sFields.Declare
+f.Intrinsic.Control.Try
+	f.Intrinsic.String.Split(v.DataTable.displayDT.FieldNames, "*!*", v.Local.sFields)
+	f.Intrinsic.Control.For(v.Local.iCnt, 0, v.Local.sFields.UBound, 1)
+		gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", v.Local.sFields(v.Local.iCnt), "HeaderFontBold", True)
+		gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", v.Local.sFields(v.Local.iCnt), "Visible", True)
+		gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", v.Local.sFields(v.Local.iCnt), "ReadOnly", True)
+		gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", v.Local.sFields(v.Local.iCnt), "AllowEdit", False)
+		gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", v.Local.sFields(v.Local.iCnt), "HeaderHAlignment", "Near")
+		gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", v.Local.sFields(v.Local.iCnt), "CellHAlignment", "Near")
+		gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", v.Local.sFields(v.Local.iCnt), "HeaderBackColor", v.Color.GSS)
+		gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", v.Local.sFields(v.Local.iCnt), "HeaderForeColor", v.Color.White)
+	f.Intrinsic.Control.Next(v.Local.iCnt)
+	
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "Customer", "Caption", "Customer")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "Customer_Name", "Caption", "Customer Name")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "Ship_To", "Caption", "Ship To ID")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "City", "Caption", "City")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "State", "Caption", "State")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "Product_Line", "Caption", "PL")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "PL_Discnt", "Caption", "PL Discount")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "Cust_Margin", "Caption", "Cust Margin")
+	
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "City", "HeaderHAlignment", "Center")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "State", "HeaderHAlignment", "Center")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "Ship_To", "HeaderHAlignment", "Center")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "Ship_To", "CellHAlignment", "Center")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "Product_Line", "HeaderHAlignment", "Center")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "Product_Line", "CellHAlignment", "Center")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "PL_Discnt", "CellHAlignment", "Far")
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "Cust_Margin", "CellHAlignment", "Far")
+	
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "Customer", "Visible", False)
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "Customer_Name", "Visible", False)
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "City", "Visible", False)
+	gui.F_Schema.GsGcSchema.SetColumnProperty("displayGV", "State", "Visible", False)
+	
+	gui.F_Schema.GsGcSchema.ColumnEdit("displayGV", "Delete", "EditorButton", "Delete")
+	gui.F_Schema.GsGcSchema.ColumnEdit("displayGV", "Update", "EditorButton", "Update")
+	
+	gui.F_Schema.GsGcSchema.BestFitColumns("displayGV")
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.loadGridProperties.End
+
+Program.Sub.Form_UnLoad.Start
+f.Intrinsic.Control.End
+Program.Sub.Form_UnLoad.End
+
+Program.Sub.loadDisplayDt.Start
+v.Local.sSQL.Declare
+f.Intrinsic.Control.Try
+	f.ODBC.Connection!con.OpenCompanyConnection
+		f.Data.DataTable.CreateFromSQL("tmpDisplayDT", "con", "Select * from GCG_5627_CUST_MAINT")
+	f.ODBC.Connection!con.Close
+	
+	f.Data.DataTable.DeleteRow("displayDT")
+	f.Data.DataTable.AcceptChanges("displayDT")
+	f.Data.DataTable.Merge("tmpDisplayDT", "displayDT", false, 2)
+	f.Data.DataTable.Close("tmpDisplayDT")
+	
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.loadDisplayDt.End
+
+'********************************************Schema Button Events******************************
+Program.Sub.cmd_Schema_Customer_Brw_Click.Start
+v.Local.sCustomer.Declare
+f.Intrinsic.Control.Try
+	f.Intrinsic.UI.CommonBrowser(205, "", v.Local.sCustomer)
+	f.Intrinsic.Control.If(v.Local.sCustomer, <>, "***CANCEL***")
+		f.Intrinsic.String.Split(v.Local.sCustomer, "*!*", v.Local.sCustomer)
+		gui.F_Schema.txt_Schema_Customer.Text(v.Local.sCustomer(0))
+	f.Intrinsic.Control.EndIf
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.cmd_Schema_Customer_Brw_Click.End
+
+Program.Sub.cmd_Schema_ShipTo_Brw_Click.Start
+v.Local.sSQL.Declare
+v.Local.sRet.Declare
+v.Local.sCustomer.Declare
+v.Local.sShipId.Declare
+f.Intrinsic.Control.Try
+	'v.Local.sCustomer.Set(v.Screen.F_Schema!txt_Schema_Customer.Text)
+	'f.Intrinsic.Control.If(v.Local.sCustomer.Trim, =, "")
+		'v.Local.sSQL.Set("select CUSTOMER, Name_CUSTOMER_ship AS CUSTOMER_NAME, ' ' AS SHIP_ID, Address1_ship AS SHIP_ADDRESS, city_ship AS CITY, state_ship AS STATE, code_zip_ship AS ZIP, country_ship AS COUNTRY FROM V_CUSTOMER_shipto where CUSTOMER in (select distinct CUSTOMER from V_CUSTOMER_Master) union select CUSTOMER, CUSTOMER_NAME, SHIP_SEQ as SHIP_ID, SHIP_ADDRESS1 asSHIP_ADDRESS , SHIP_CITY as CITY, SHIP_STATE as STATE, SHIP_ZIP as ZIP, SHIP_COUNTRY as COUNTRY from V_OE_MULTI_SHIP where CUSTOMER in (select distinct CUSTOMER from V_CUSTOMER_Master)")
+		v.Local.sSQL.Set("Select Distinct Ship_To from GCG_5627_CUST_MAINT")
+	'f.Intrinsic.Control.Else
+	'	f.Intrinsic.String.Build("select CUSTOMER, Name_CUSTOMER_ship AS CUSTOMER_NAME, ' ' AS SHIP_ID, Address1_ship AS SHIP_ADDRESS, city_ship AS CITY, state_ship AS STATE, code_zip_ship AS ZIP, country_ship AS COUNTRY FROM V_CUSTOMER_shipto where CUSTOMER in ('{0}') union select CUSTOMER, CUSTOMER_NAME, SHIP_SEQ as SHIP_ID, SHIP_ADDRESS1 as SHIP_ADDRESS, SHIP_CITY as CITY, SHIP_STATE as STATE , SHIP_ZIP as ZIP, SHIP_COUNTRY as COUNTRY from V_OE_MULTI_SHIP where CUSTOMER in ('{0}')", v.Local.sCustomer.Trim, v.Local.sSQL)
+	'f.Intrinsic.Control.EndIf
+	f.ODBC.Connection!con.OpenCompanyConnection
+		'f.Intrinsic.UI.Browser("Ship To ID", "con", v.Local.sSQL, "CUSTOMER*!*CUSTOMER_NAME*!*SHIP_ID*!*SHIP_ADDRESS*!*CITY*!*STATE*!*ZIP*!*COUNTRY", "70*!*100*!*50*!*120*!*60*!*40*!*60*!*50", v.Local.sRet)
+		f.Intrinsic.UI.Browser("Ship To ID", "con", v.Local.sSQL, "Owners Group", "70", v.Local.sRet)
+		f.Intrinsic.Control.If(v.Local.sCustomer, <>, "***CANCEL***")
+			f.Intrinsic.String.Split(v.Local.sRet, "*!*", v.Local.sShipId)
+			gui.F_Schema.txt_Schema_ShipTo.Text(v.Local.sShipId(2).Trim)
+		f.Intrinsic.Control.EndIf	
+	f.ODBC.Connection!con.Close
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.cmd_Schema_ShipTo_Brw_Click.End
+
+Program.Sub.cmd_Schema_PL_Brw_Click.Start
+v.Local.sRet.Declare
+f.Intrinsic.Control.Try
+	f.ODBC.Connection!con.OpenCompanyConnection
+		f.Intrinsic.UI.Browser("Ship To ID", "con", "select Product_Line, Product_line_Desc, Product_line_Name from V_product_line", "Product Line*!*PL Description*!*PL Name", "70*!*120*!*120", v.Local.sRet)
+		f.Intrinsic.String.Split(v.Local.sRet, "*!*", v.Local.sRet)
+		gui.F_Schema.txt_Schema_PL.Text(v.Local.sRet(0).Trim)
+	f.ODBC.Connection!con.Close
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.cmd_Schema_PL_Brw_Click.End
+
+Program.Sub.cmd_Schema_Search_Click.Start
+v.Local.sScreenTemp.Declare
+v.Local.sFilter.Declare
+f.Intrinsic.Control.Try
+	v.Local.sScreenTemp.Set(v.Screen.F_Schema!txt_Schema_Customer.Text)
+	f.Intrinsic.Control.If(v.Local.sScreenTemp.Trim, <>, "")
+		f.Intrinsic.String.Build("Customer = '{0}'", v.Local.sScreenTemp.Trim, v.Local.sFilter)
+	f.Intrinsic.Control.EndIf
+	
+	v.Local.sScreenTemp.Set(v.Screen.F_Schema!txt_Schema_ShipTo.Text)
+	f.Intrinsic.Control.If(v.Local.sScreenTemp.Trim, <>, "")
+		f.Intrinsic.Control.If(v.Local.sFilter.Trim, =, "")
+			f.Intrinsic.String.Build("Ship_To = '{0}'", v.Local.sScreenTemp.Trim, v.Local.sFilter)
+		f.Intrinsic.Control.Else
+			f.Intrinsic.String.Build("{0} And Ship_To = '{1}'", v.Local.sFilter, v.Local.sScreenTemp.Trim, v.Local.sFilter)
+		f.Intrinsic.Control.EndIf		
+	f.Intrinsic.Control.EndIf
+	
+	v.Local.sScreenTemp.Set(v.Screen.F_Schema!txt_Schema_PL.Text)
+	f.Intrinsic.Control.If(v.Local.sScreenTemp.Trim, <>, "")
+		f.Intrinsic.Control.If(v.Local.sFilter.Trim, =, "")
+			f.Intrinsic.String.Build("Product_Line = '{0}'", v.Local.sScreenTemp.Trim, v.Local.sFilter)
+		f.Intrinsic.Control.Else
+			f.Intrinsic.String.Build("{0} And Product_Line = '{1}'", v.Local.sFilter, v.Local.sScreenTemp.Trim, v.Local.sFilter)
+		f.Intrinsic.Control.EndIf				
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.If(v.Local.sFilter.Trim, <>, "")
+		f.Data.DataView.SetFilter("displayDT", "displayDV", v.Local.sFilter)
+	f.Intrinsic.Control.EndIf	
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.cmd_Schema_Search_Click.End
+
+Program.Sub.cmd_Schema_Upload_Click.Start
+v.Local.sRet.Declare
+v.Local.sFilePath.Declare
+v.Local.sText.Declare
+v.Local.sExtension.Declare
+v.Local.bExits.Declare
+v.Local.iRetMsg.Declare
+
+v.Local.sFieldTitles.Declare
+v.Local.sFieldTypes.Declare
+
+v.Local.iCnt.Declare
+v.Local.iCnt2.Declare
+
+v.Local.sOwnerGroups.Declare
+v.Local.sPL.Declare
+'Discount Variable.
+v.Local.fDC.Declare
+'Customer Margin Variable.
+v.Local.fCM.Declare
+'titles
+v.Local.sTitle1.Declare
+v.Local.sTitle2.Declare
+v.Local.sTitle3.Declare
+
+f.Intrinsic.Control.Try
+	f.Intrinsic.Control.If(v.DataTable.uploadtDT.Exists)
+		f.Data.DataTable.Close("uploadtDT")
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.If(v.DataTable.saveDT.Exists)
+		f.Data.DataTable.Close("saveDT")
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.If(v.Screen.F_Schema!optAppend.Value, =, 1)
+		f.Intrinsic.UI.Msgbox("Do you wish to Append Records?", "Warning", 3, v.Local.iRetMsg)
+		f.Intrinsic.Control.If(v.Local.iRetMsg, <>, 6)
+			f.Intrinsic.Control.ExitSub
+		f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.Else
+		f.Intrinsic.UI.Msgbox("Do you wish to Overwrite Records?", "Warning", 3, v.Local.iRetMsg)
+		f.Intrinsic.Control.If(v.Local.iRetMsg, <>, 6)
+			f.Intrinsic.Control.ExitSub
+		f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.EndIf
+	
+	v.Local.sFieldTitles.Set("OWNER_GROUP*!*PRODUCT_LINE_BLANK*!*PL_DSC_BLANK*!*CUST_MARG_BLANK")
+	v.Local.sFieldTypes.Set("STRING*!*STRING*!*STRING*!*STRING")
+	
+	f.Intrinsic.Control.For(v.Local.iCnt, 0, 59, 1)
+		f.Intrinsic.String.Build("{0}*!*PL_{1}*!*PD_{1}*!*CM_{1}", v.Local.sFieldTitles, v.Local.iCnt, v.Local.sFieldTitles)
+		f.Intrinsic.String.Build("{0}*!*STRING*!*STRING*!*STRING", v.Local.sFieldTypes, v.Local.sFieldTypes)
+	f.Intrinsic.Control.Next(v.Local.iCnt)
+	''''''LAST CODED> 	
+	f.Intrinsic.UI.ShowOpenFileDialog("", "XLXS|*.xlsx|XLS|*.xls|CSV|*.csv", v.Local.sFilePath)
+	f.Intrinsic.Control.If(v.Local.sFilePath.Trim, <>, "***CANCEL***")
+		f.Intrinsic.File.GetExtensionComponent(v.Local.sFilePath, v.Local.sExtension)
+		f.Intrinsic.File.Exists(v.Local.sFilePath, v.Local.bExits)
+		f.Intrinsic.Control.If(v.Local.bExits.Not)
+			f.Intrinsic.Control.ExitSub
+		f.Intrinsic.Control.EndIf
+		f.Automation.MSExcel.CheckPresence(v.Local.bExits)
+		
+		f.Intrinsic.Control.If(v.Local.sExtension.UCase, =, ".CSV")
+			'f.Data.DataTable.CreateFromCSV("uploadtDT", v.Local.sFilePath, "CUSTOMER*!*CUSTOMER_NAME*!*SHIP_TO*!*CITY*!*STATE*!*PRODUCT_LINE*!*PL_DISCNT*!*CUST_MARGIN", "STRING*!*STRING*!*STRING*!*STRING*!*STRING*!*STRING*!*STRING*!*STRING", true)
+			f.Data.DataTable.CreateFromCSV("uploadtDT", v.Local.sFilePath, v.Local.sFieldTitles, v.Local.sFieldTypes, true)
+			f.Intrinsic.File.File2String(v.Local.sFilePath, v.Local.sText)
+		f.Intrinsic.Control.Else
+			f.Intrinsic.Control.If(v.Local.bExits)
+				f.Automation.MSExcel.ReadSpreadsheet(v.Local.sFilePath, v.Local.sText)
+				'f.Data.DataTable.CreateFromString("uploadtDT", v.Local.sText, "CUSTOMER*!*CUSTOMER_NAME*!*SHIP_TO*!*CITY*!*STATE*!*PRODUCT_LINE*!*PL_DISCNT*!*CUST_MARGIN", "STRING*!*STRING*!*STRING*!*STRING*!*STRING*!*STRING*!*STRING*!*STRING", "*!*", "$!$", true)
+				f.Data.DataTable.CreateFromString("uploadtDT", v.Local.sText, v.Local.sFieldTitles, v.Local.sFieldTypes, "*!*", "$!$", true)
+			f.Intrinsic.Control.Else
+				'f.Data.DataTable.CreateFromCSV("uploadtDT", v.Local.sFilePath, "CUSTOMER*!*CUSTOMER_NAME*!*SHIP_TO*!*CITY*!*STATE*!*PRODUCT_LINE*!*PL_DISCNT*!*CUST_MARGIN", "STRING*!*STRING*!*STRING*!*STRING*!*STRING*!*STRING*!*STRING*!*STRING", true)
+				f.Data.DataTable.CreateFromCSV("uploadtDT", v.Local.sFilePath,v.Local.sFieldTitles, v.Local.sFieldTypes, true)
+				f.Intrinsic.File.File2String(v.Local.sFilePath, v.Local.sText)
+			f.Intrinsic.Control.EndIf
+		f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.Else
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.If(v.DataTable.uploadtDT.Exists)
+		f.Intrinsic.Control.If(v.DataTable.uploadtDT.RowCount, >, 1)
+			f.Data.DataTable.DeleteRow("uploadtDT", 0)
+			f.Data.DataTable.AcceptChanges("uploadtDT")
+		f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.EndIf
+	
+	f.Data.DataTable.Create("saveDT")
+	f.Data.DataTable.AddColumn("saveDT", "SHIP_TO", "STRING")
+	f.Data.DataTable.AddColumn("saveDT", "PRODUCT_LINE", "STRING")
+	f.Data.DataTable.AddColumn("saveDT", "PL_DISCNT", "FLOAT")
+	f.Data.DataTable.AddColumn("saveDT", "CUST_MARGIN", "FLOAT")
+	
+	f.Intrinsic.Control.For(v.Local.iCnt, 0 , v.DataTable.uploadtDT.RowCount--, 1)
+		v.Local.sOwnerGroups.Set(v.DataTable.uploadtDT(v.Local.iCnt).OWNER_GROUP!FieldValTrim)
+		v.Local.sPL.Set(v.DataTable.uploadtDT(v.Local.iCnt).PRODUCT_LINE_BLANK!FieldValTrim)
+		v.Local.fDC.Set(v.DataTable.uploadtDT(v.Local.iCnt).PL_DSC_BLANK!FieldVal)
+		v.Local.fCM.Set(v.DataTable.uploadtDT(v.Local.iCnt).CUST_MARG_BLANK!FieldVal)
+		f.Data.DataTable.AddRow("saveDT", "SHIP_TO", v.Local.sOwnerGroups.Trim, "PRODUCT_LINE", v.Local.sPL.Trim, "PL_DISCNT", v.Local.fDC, "CUST_MARGIN", v.Local.fCM)
+		
+		v.Local.sPL.Set("")
+		v.Local.fDC.Set(0)
+		v.Local.fCM.Set(0)
+			
+		f.Intrinsic.Control.For(v.Local.iCnt2, 0, 59, 1)
+			f.Intrinsic.String.Build("PL_{0}", v.Local.iCnt2, v.Local.sTitle1)
+			v.Local.sPL.Set(v.DataTable.uploadtDT(v.Local.iCnt).[v.Local.sTitle1]!FieldValTrim)
+			f.Intrinsic.String.Build("PD_{0}", v.Local.iCnt2, v.Local.sTitle2)
+			v.Local.fDC.Set(v.DataTable.uploadtDT(v.Local.iCnt).[v.Local.sTitle2]!FieldVal)
+			f.Intrinsic.String.Build("CM_{0}", v.Local.iCnt2, v.Local.sTitle3)
+			v.Local.fCM.Set(v.DataTable.uploadtDT(v.Local.iCnt).[v.Local.sTitle3]!FieldVal)
+			
+			f.Intrinsic.Control.If(v.Local.sPL.Trim, <>, "")
+				f.Data.DataTable.AddRow("saveDT", "SHIP_TO", v.Local.sOwnerGroups.Trim, "PRODUCT_LINE", v.Local.sPL.Trim, "PL_DISCNT", v.Local.fDC, "CUST_MARGIN", v.Local.fCM)
+			f.Intrinsic.Control.EndIf
+			
+			v.Local.sPL.Set("")
+			v.Local.fDC.Set(0)
+			v.Local.fCM.Set(0)
+		f.Intrinsic.Control.Next(v.Local.iCnt2)
+	f.Intrinsic.Control.Next(v.Local.iCnt)
+	
+	f.Data.DataTable.Close("uploadtDT")
+	
+	'f.Intrinsic.Control.If(v.Screen.F_Schema!optAppend.Value, =, 1)
+	f.Intrinsic.Control.If(v.Screen.F_Schema!optAppend.Value)
+		f.ODBC.Connection!con.OpenCompanyConnection
+			f.Data.DataTable.SaveToDB("saveDT", "con", "GCG_5627_CUST_MAINT", "Ship_To*!*PRODUCT_LINE", 256)
+		f.ODBC.Connection!con.Close
+	f.Intrinsic.Control.Else	
+		f.ODBC.Connection!con.OpenCompanyConnection
+			f.ODBC.Connection!con.Execute("Delete from GCG_5627_CUST_MAINT")
+			f.Data.DataTable.SaveToDB("saveDT", "con", "GCG_5627_CUST_MAINT", "Ship_To*!*PRODUCT_LINE", 256)
+		f.ODBC.Connection!con.Close
+	f.Intrinsic.Control.EndIf	
+	
+	f.Data.DataTable.Close("saveDT")
+	
+	f.Intrinsic.Control.CallSub(loadDisplayDt)
+f.Intrinsic.Control.Catch
+
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.cmd_Schema_Upload_Click.End
+
+'********************************************Grid Functions*************************************
+Program.Sub.SetContextMenus.Start
+v.Local.bEditSO.Declare	
+v.Local.bEditWO.Declare
+f.Intrinsic.Control.Try
+	Gui.F_Schema..ContextMenuCreate("ctxSchema")
+	Gui.F_Schema.GsGcSchema.ContextMenuAttach("ctxSchema")
+	Gui.F_Schema..ContextMenuAddItem("ctxSchema","Refresh",0,"Refresh")
+	Gui.F_Schema..ContextMenuAddItem("ctxSchema","Add",0,"Add Record")
+	Gui.F_Schema..ContextMenuAddItem("ctxSchema","Export",0,"Export")		
+	Gui.F_Schema..ContextMenuSetItemEventHandler("ctxSchema","Refresh","MenuClickRefresh")
+	Gui.F_Schema..ContextMenuSetItemEventHandler("ctxSchema","Add","addRecordSub")
+	Gui.F_Schema..ContextMenuSetItemEventHandler("ctxSchema","Export","MenuClickExport")
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.SetContextMenus.End
+
+Program.Sub.addRecordSub.Start
+f.Intrinsic.Control.Try
+	v.Global.bAddRecord.Set(true)
+	gui.F_RecordScreen.cmd_Record_Add_Update.Caption("Add Record")
+	f.Intrinsic.Control.CallSub(cleanRecordTxt)
+	f.Intrinsic.Control.CallSub(recordLock, passedEnabled, True)
+	gui.F_RecordScreen..Show
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.addRecordSub.End
+
+Program.Sub.updateRecordSub.Start
+f.Intrinsic.Control.Try
+	v.Global.bAddRecord.Set(true)
+	gui.F_RecordScreen.cmd_Record_Add_Update.Caption("Update Record")
+	gui.F_RecordScreen..Show
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.updateRecordSub.End
+
+Program.Sub.deleteRecordSub.Start
+v.Local.iRowIndex.Declare
+v.Local.sCustomer.Declare
+v.Local.sShipTo.Declare
+f.Intrinsic.Control.Try
+	
+	v.Local.iRowIndex.Set(v.Args.RowIndex)
+	
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.deleteRecordSub.End
+
+Program.Sub.cmd_Record_Customer_Brw_Click.Start
+v.Local.sCustomer.Declare
+f.Intrinsic.Control.Try
+	f.Intrinsic.UI.CommonBrowser(205, "", v.Local.sCustomer)
+	f.Intrinsic.Control.If(v.Local.sCustomer, <>, "***CANCEL***")
+		f.Intrinsic.String.Split(v.Local.sCustomer, "*!*", v.Local.sCustomer)
+		gui.F_RecordScreen.txt_Record_Customer.Text(v.Local.sCustomer(0))
+	f.Intrinsic.Control.EndIf
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.cmd_Record_Customer_Brw_Click.End
+
+Program.Sub.cmd_Record_ShipTo_Brw_Click.Start
+v.Local.sSQL.Declare
+v.Local.sRet.Declare
+v.Local.sCustomer.Declare
+v.Local.sShipId.Declare
+f.Intrinsic.Control.Try
+	v.Local.sSQL.Set("Select Distinct Ship_To from GCG_5627_CUST_MAINT")
+'	v.Local.sCustomer.Set(v.Screen.F_RecordScreen!txt_Record_Customer.Text)
+'	f.Intrinsic.Control.If(v.Local.sCustomer.Trim, =, "")
+'		v.Local.sSQL.Set("select CUSTOMER, Name_CUSTOMER_ship AS CUSTOMER_NAME, ' ' AS SHIP_ID, Address1_ship AS SHIP_ADDRESS, city_ship AS CITY, state_ship AS STATE, code_zip_ship AS ZIP, country_ship AS COUNTRY FROM V_CUSTOMER_shipto where CUSTOMER in (select distinct CUSTOMER from V_CUSTOMER_Master) union select CUSTOMER, CUSTOMER_NAME, SHIP_SEQ as SHIP_ID, SHIP_ADDRESS1 asSHIP_ADDRESS , SHIP_CITY as CITY, SHIP_STATE as STATE, SHIP_ZIP as ZIP, SHIP_COUNTRY as COUNTRY from V_OE_MULTI_SHIP where CUSTOMER in (select distinct CUSTOMER from V_CUSTOMER_Master)")
+'	f.Intrinsic.Control.Else
+'		f.Intrinsic.String.Build("select CUSTOMER, Name_CUSTOMER_ship AS CUSTOMER_NAME, ' ' AS SHIP_ID, Address1_ship AS SHIP_ADDRESS, city_ship AS CITY, state_ship AS STATE, code_zip_ship AS ZIP, country_ship AS COUNTRY FROM V_CUSTOMER_shipto where CUSTOMER in ('{0}') union select CUSTOMER, CUSTOMER_NAME, SHIP_SEQ as SHIP_ID, SHIP_ADDRESS1 as SHIP_ADDRESS, SHIP_CITY as CITY, SHIP_STATE as STATE , SHIP_ZIP as ZIP, SHIP_COUNTRY as COUNTRY from V_OE_MULTI_SHIP where CUSTOMER in ('{0}')", v.Local.sCustomer.Trim, v.Local.sSQL)
+'	f.Intrinsic.Control.EndIf
+	f.ODBC.Connection!con.OpenCompanyConnection
+		'f.Intrinsic.UI.Browser("Ship To ID", "con", v.Local.sSQL, "CUSTOMER*!*CUSTOMER_NAME*!*SHIP_ID*!*SHIP_ADDRESS*!*CITY*!*STATE*!*ZIP*!*COUNTRY", "70*!*100*!*50*!*120*!*60*!*40*!*60*!*50", v.Local.sRet)
+		f.Intrinsic.UI.Browser("Ship To ID", "con", v.Local.sSQL, "Owners Group", "70", v.Local.sRet)
+		f.Intrinsic.Control.If(v.Local.sRet, <>, "***CANCEL***")
+			f.Intrinsic.String.Split(v.Local.sRet, "*!*", v.Local.sShipId)
+			gui.F_RecordScreen.txt_Record_ShipTo.Text(v.Local.sShipId(2).Trim)
+		f.Intrinsic.Control.EndIf		
+	f.ODBC.Connection!con.Close
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.cmd_Record_ShipTo_Brw_Click.End
+
+Program.Sub.cmd_Record_PL_Brw_Click.Start
+v.Local.sRet.Declare
+f.Intrinsic.Control.Try
+	f.ODBC.Connection!con.OpenCompanyConnection
+		f.Intrinsic.UI.Browser("Ship To ID", "con", "select Product_Line, Product_line_Desc, Product_line_Name from V_product_line", "Product Line*!*PL Description*!*PL Name", "70*!*120*!*120", v.Local.sRet)
+		f.Intrinsic.Control.If(v.Local.sRet, <>, "***CANCEL***")
+			f.Intrinsic.String.Split(v.Local.sRet, "*!*", v.Local.sRet)
+			gui.F_RecordScreen.txt_Record_PL.Text(v.Local.sRet(0).Trim)
+		f.Intrinsic.Control.EndIf		
+	f.ODBC.Connection!con.Close
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.cmd_Record_PL_Brw_Click.End
+
+Program.Sub.cmd_Record_Add_Update_Click.Start
+v.Local.sCustomer.Declare
+v.Local.sCustomer_Name.Declare
+v.Local.sShipTo.Declare
+v.Local.sCity.Declare
+v.Local.sState.Declare
+v.Local.sPL.Declare
+v.Local.sPL_Disc.Declare
+v.Local.sCust_Margin.Declare
+v.Local.sSQL.Declare
+v.Local.sRet.Declare
+v.Local.bEmpty.Declare(Boolean, false)
+f.Intrinsic.Control.Try
+	v.Local.sCustomer.Set(v.Screen.F_RecordScreen!txt_Record_Customer.Text)
+	v.Local.sShipTo.Set(v.Screen.F_RecordScreen!txt_Record_ShipTo.Text)
+	v.Local.sPL.Set(v.Screen.F_RecordScreen!txt_Record_PL.Text)
+	v.Local.sPL_Disc.Set(v.Screen.F_RecordScreen!txt_Record_PL_Discount.Text)
+	v.Local.sCust_Margin.Set(v.Screen.F_RecordScreen!txt_Record_Cust_Margin.Text)
+	
+	f.Intrinsic.Control.If(v.Local.sCustomer.Trim, =, "")
+		v.Local.bEmpty.Set(true)
+	f.Intrinsic.Control.EndIf
+	
+'	f.Intrinsic.Control.If(v.Local.sShipTo.Trim, =, "")
+'		v.Local.bEmpty.Set(true)
+'	f.Intrinsic.Control.EndIf
+'	
+'	f.Intrinsic.Control.If(v.Local.sPL.Trim, =, "")
+'		v.Local.bEmpty.Set(true)
+'	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.If(v.Local.sPL_Disc.Trim, =, "")
+		v.Local.bEmpty.Set(true)
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.If(v.Local.sCust_Margin.Trim, =, "")
+		v.Local.bEmpty.Set(true)
+	f.Intrinsic.Control.EndIf
+	
+	f.Intrinsic.Control.If(v.Local.bEmpty)
+		f.Intrinsic.UI.Msgbox("Please fill out all fields.")
+		f.Intrinsic.Control.ExitSub
+	f.Intrinsic.Control.EndIf
+	
+	f.ODBC.Connection!con.OpenCompanyConnection
+		f.Intrinsic.String.Build("Select Name_Customer from V_Customer_Master where Customer = '{0}'", v.Local.sCustomer, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sCustomer_Name)
+		f.Intrinsic.String.Build("Select SHIP_CITY, SHIP_STATE from V_OE_MULTI_SHIP where SHIP_SEQ = '{0}' and Customer = '{1}'", v.Local.sShipTo, v.Local.sCustomer, v.Local.sSQL)
+		f.ODBC.Connection!con.ExecuteAndReturn(v.Local.sSQL, v.Local.sRet)
+	f.ODBC.Connection!con.Close
+
+	f.Intrinsic.String.Split(v.Local.sRet, "*!*", v.Local.sRet)
+	f.Intrinsic.Control.If(v.Local.sRet.UBound, =, 1)
+		v.Local.sCity.Set(v.Local.sRet(0))
+		v.Local.sState.Set(v.Local.sRet(1))
+	f.Intrinsic.Control.EndIf
+
+	f.Intrinsic.Control.If(v.Global.bAddRecord)
+		f.Intrinsic.String.Build("Insert into  GCG_5627_CUST_MAINT (Customer, Customer_Name, Ship_to, City, State, Product_Line, PL_Discnt, Cust_Margin) Values ('{0}', '{1}', '{2}', '{3}', '{4}', '{5}', '{6}', '{7}')", v.Local.sCustomer, v.Local.sCustomer_Name, v.Local.sShipTo, v.Local.sCity, v.Local.sState, v.Local.sPL, v.Local.sPL_Disc, v.Local.sCust_Margin, v.Local.sSQL)		
+	f.Intrinsic.Control.Else
+		f.Intrinsic.String.Build("Update GCG_5627_CUST_MAINT Set Customer = '{0}', Customer_Name = '{1}', Ship_to = '{2}', City = '{3}', State = '{4}', Product_Line = '{5}', PL_Discnt = '{6}', Cust_Margin = '{7}'  Where Customer = '{0}' And Ship_to = '{2}'", v.Local.sCustomer, v.Local.sCustomer_Name, v.Local.sShipTo, v.Local.sCity, v.Local.sState, v.Local.sPL, v.Local.sPL_Disc, v.Local.sCust_Margin, v.Local.sSQL)
+	f.Intrinsic.Control.EndIf
+	
+	f.ODBC.Connection!con.OpenCompanyConnection
+		f.ODBC.Connection!con.Execute(v.Local.sSQL)
+	f.ODBC.Connection!con.Close
+	'Refresh
+	f.Intrinsic.Control.CallSub(loadDisplayDt)
+	'Close
+	f.Intrinsic.Control.CallSub(F_RecordScreen_UnLoad)
+	
+	f.Intrinsic.Control.CallSub(recordLock, passedEnabled, True)
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.cmd_Record_Add_Update_Click.End
+
+Program.Sub.F_RecordScreen_UnLoad.Start
+f.Intrinsic.Control.Try
+	f.Intrinsic.Control.CallSub(recordLock, passedEnabled, True)
+	v.Global.bAddRecord.Set(False)
+	gui.F_RecordScreen..Visible(False)	
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.F_RecordScreen_UnLoad.End
+
+Program.Sub.GsGcSchema_RowCellClick.Start
+v.Local.sColumn.Declare
+v.Local.sCustomer.Declare
+v.Local.sShipToID.Declare
+v.Local.sSQL.Declare
+v.Local.iRet.Declare
+f.Intrinsic.Control.Try
+	v.Local.sColumn.Set(v.Args.Column)
+	f.Intrinsic.Control.SelectCase(v.Local.sColumn.UCase)
+		f.Intrinsic.Control.Case("UPDATE")
+			f.Intrinsic.Control.CallSub(recordLock, passedEnabled, False)
+			f.Intrinsic.Control.CallSub(cleanRecordTxt)
+			gui.F_RecordScreen.cmd_Record_Add_Update.Caption("Update Record")
+			gui.F_RecordScreen.txt_Record_Customer.Text(v.DataTable.displayDT(v.Args.RowIndex).Customer!FieldValTrim)
+			gui.F_RecordScreen.txt_Record_ShipTo.Text(v.DataTable.displayDT(v.Args.RowIndex).Ship_To!FieldValTrim)
+			gui.F_RecordScreen.txt_Record_PL.Text(v.DataTable.displayDT(v.Args.RowIndex).Product_Line!FieldValTrim)
+			gui.F_RecordScreen.txt_Record_PL_Discount.Text(v.DataTable.displayDT(v.Args.RowIndex).PL_Discnt!FieldValTrim)
+			gui.F_RecordScreen.txt_Record_Cust_Margin.Text(v.DataTable.displayDT(v.Args.RowIndex).Cust_Margin!FieldValTrim)
+			gui.F_RecordScreen..Show
+		f.Intrinsic.Control.Case("DELETE")
+			f.Intrinsic.UI.Msgbox("Do you wish delete selected record?", "Delete Record", 3, v.Local.iRet)
+			f.Intrinsic.Control.If(v.Local.iRet, =, 6)
+				v.Local.sCustomer.Set(v.DataTable.displayDT(v.Args.rowIndex).Customer!FieldValTrim)
+				v.Local.sShipToID.Set(v.DataTable.displayDT(v.Args.rowIndex).Ship_To!FieldValTrim)
+				f.ODBC.Connection!con.OpenCompanyConnection
+					f.Intrinsic.String.Build("Delete from GCG_5627_CUST_MAINT where Customer = '{0}' and Ship_To = '{1}'", v.Local.sCustomer, v.Local.sShipToID, v.Local.sSQL)
+					f.ODBC.Connection!con.Execute(v.Local.sSQL)
+				f.ODBC.Connection!con.Close
+				f.Intrinsic.Control.CallSub(loadDisplayDt)
+			f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.EndSelect
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.GsGcSchema_RowCellClick.End
+
+Program.Sub.recordLock.Start
+f.Intrinsic.Control.Try
+	gui.F_RecordScreen.txt_Record_Customer.Enabled(v.Args.passedEnabled)
+	gui.F_RecordScreen.cmd_Record_Customer_Brw.Enabled(v.Args.passedEnabled)
+	gui.F_RecordScreen.txt_Record_ShipTo.Enabled(v.Args.passedEnabled)
+	gui.F_RecordScreen.cmd_Record_Customer_Brw.Enabled(v.Args.passedEnabled)
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.recordLock.End
+
+Program.Sub.cleanRecordTxt.Start
+f.Intrinsic.Control.Try
+	gui.F_RecordScreen.txt_Record_Customer.Text(" ")
+	gui.F_RecordScreen.txt_Record_ShipTo.Text(" ")
+	gui.F_RecordScreen.txt_Record_PL.Text(" ")
+	gui.F_RecordScreen.txt_Record_PL_Discount.Text(" ")
+	gui.F_RecordScreen.txt_Record_Cust_Margin.Text(" ")
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.cleanRecordTxt.End
+
+Program.Sub.checkCustomFolder.Start
+v.Local.sFolder.Declare
+v.Local.bExists.Declare
+f.Intrinsic.Control.Try
+	f.Intrinsic.String.Build("{0}\CUSTOM\GCG_5627\", v.Caller.GlobalDir, v.Local.sFolder)
+	f.Intrinsic.File.DirExists(v.Local.sFolder, v.Local.bExists)
+	f.Intrinsic.Control.If(v.Local.bExists.Not)
+		f.Intrinsic.File.CreateDir(v.Local.sFolder)
+	f.Intrinsic.Control.EndIf
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.checkCustomFolder.End
+
+Program.Sub.MenuClickExport.Start
+v.Local.sFileExport.Declare
+v.Local.bExcel.Declare
+v.Local.bFileLocked.Declare
+v.Local.sMsg.Declare
+v.Local.sControl.Declare
+v.Local.sGV.Declare
+v.Local.bExists.Declare
+f.Intrinsic.Control.Try
+
+	f.Intrinsic.String.Build("{0}\CUSTOM\GCG_5627", v.Caller.GlobalDir, v.Local.sFileExport)
+	f.Intrinsic.File.DirExists(v.Local.sFileExport, v.Local.bExists)
+	
+	f.Intrinsic.Control.If(v.Local.bExists.Not)
+		f.Intrinsic.File.CreateDir(v.Local.sFileExport)
+	f.Intrinsic.Control.EndIf
+	
+	f.Automation.MSExcel.CheckPresence(v.Local.bExcel)
+	f.Intrinsic.Control.If(v.Local.bExcel)
+		f.Intrinsic.String.Build("{0}\GAB_5627_Export.xlsx", v.Local.sFileExport,v.Local.sFileExport)
+		
+		f.Intrinsic.File.Exists(v.Local.sFileExport, v.Local.bExists)
+		f.Intrinsic.Control.If(v.Local.bExists.Not)
+			'f.Automation.MSExcel.CreateAppObject("excelObj")
+			f.Automation.MSExcel.WriteSpreadsheet(v.Local.sFileExport, "")
+		f.Intrinsic.Control.EndIf
+	
+	
+		f.Intrinsic.File.IsFileLocked(v.Local.sFileExport, v.Local.bFileLocked)
+		f.Intrinsic.Control.If(v.Local.bFileLocked)
+			f.Intrinsic.String.Build("File is already open. Please close and export again.{0}File: {1}", v.Ambient.NewLine, v.Local.sFileExport, v.Local.sMsg)
+			f.Intrinsic.UI.Msgbox(v.Local.sMsg,"File In Use")
+		f.Intrinsic.Control.Else
+			Gui.F_Schema.GsGcSchema.Export(v.Local.sFileExport,"xlsx")
+			f.Intrinsic.Task.ShellExec(0, "", v.Local.sFileExport, "", "", 1)
+		f.Intrinsic.Control.EndIf
+	f.Intrinsic.Control.Else
+		f.Intrinsic.String.Build("{0}\GAB_5627_Export.csv", v.Local.sFileExport,  v.Local.sFileExport)
+		
+		f.Intrinsic.File.Exists(v.Local.sFileExport, v.Local.bExists)
+		f.Intrinsic.Control.If(v.Local.bExists.Not)
+			f.Intrinsic.File.String2File(v.Local.sFileExport, "")
+		f.Intrinsic.Control.EndIf		
+		
+		f.Intrinsic.File.IsFileLocked(v.Local.sFileExport, v.Local.bFileLocked)
+		f.Intrinsic.Control.If(v.Local.bFileLocked)
+			f.Intrinsic.String.Build("File is already open. Please close and export again.{0}File: {1}", v.Ambient.NewLine, v.Local.sFileExport, v.Local.sMsg)
+			f.Intrinsic.UI.Msgbox(v.Local.sMsg,"File In Use")
+		f.Intrinsic.Control.Else
+			Gui.F_Schema.GsGcSchema.Export(v.Local.sFileExport,"csv")
+		f.Intrinsic.Control.EndIf
+		f.Intrinsic.Task.ShellExec(0,"",v.Local.sFileExport,"","",1)
+	f.Intrinsic.Control.EndIf
+f.Intrinsic.Control.Catch
+	f.Intrinsic.Control.CallSub(ErrorMsg, CurrentSub, v.Ambient.CurrentSubroutine)
+f.Intrinsic.Control.EndTry
+Program.Sub.MenuClickExport.End

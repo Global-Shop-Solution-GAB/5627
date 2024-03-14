@@ -1,0 +1,17 @@
+-- Database: GLOBALPLA Metadata version: 2 Exported: Dec 19, 2019
+-- Begin Tables
+SET LEGACYTYPESALLOWED = ON;
+-- Begin Multi-Line Statement
+CREATE TABLE "GCG_5627_Q2SO" USING 'GCG_5627_Q2SO.mkd' PAGESIZE=4096 (
+ "QUOTE_NO" CHAR(7),
+ "QUOTE_LINE_NO" CHAR(4),
+ "INPUT_PRICE" NUMERIC(8,2),
+ "AKC_PRICE" NUMERIC(8,2),
+ "MARGIN_PRICE" NUMERIC(8,2),
+ "SO_NO" CHAR(7),
+ "SO_LINE_NO" CHAR(4),
+ "LAST_GSS" CHAR(9),
+ "LAST_DATE" CHAR(10) );
+-- End Multi-Line Statement
+SET LEGACYTYPESALLOWED = OFF;
+-- End Tables
